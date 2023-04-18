@@ -1,6 +1,12 @@
-import express, { Application, json } from 'express'
+import express, { Application, json } from "express";
+import handleMiddleware from "./middlewares/handle.middleware";
+import userRoutes from "./routes/users.routes";
 
-const app: Application = express()
-app.use(json())
+const app: Application = express();
+app.use(json());
 
-export default app
+app.use("/users", userRoutes);
+
+app.use(handleMiddleware.handleError);
+
+export default app;
