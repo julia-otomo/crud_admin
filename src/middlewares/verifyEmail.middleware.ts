@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import AppError from "../error";
 import { QueryConfig, QueryResult } from "pg";
 import { client } from "../database";
+import { IUser } from "../interfaces/users.interfaces";
 
 const verifyEmail = async (
   request: Request,
@@ -33,4 +34,4 @@ const verifyEmail = async (
   next();
 };
 
-export { verifyEmail };
+export default verifyEmail;

@@ -1,12 +1,13 @@
+import "express-async-errors";
 import express, { Application, json } from "express";
-import handleMiddleware from "./middlewares/handle.middleware";
 import userRoutes from "./routes/users.routes";
+import handleError from "./middlewares/handle.middleware";
 
 const app: Application = express();
 app.use(json());
 
 app.use("/users", userRoutes);
 
-app.use(handleMiddleware.handleError);
+app.use(handleError);
 
 export default app;

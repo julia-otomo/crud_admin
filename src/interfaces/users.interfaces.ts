@@ -1,3 +1,5 @@
+import { requestUserSchema } from "../schemas/users.schemas";
+
 interface IUser {
   id: number;
   name: string;
@@ -7,4 +9,8 @@ interface IUser {
   active: boolean;
 }
 
-type IUserCreate = Omit<IUser, "id">;
+type IUserRequest = Zod.infer<typeof requestUserSchema>;
+
+type IUserResponse = Omit<IUser, "password">;
+
+export { IUser, IUserRequest, IUserResponse };
