@@ -1,12 +1,17 @@
 import format from "pg-format";
-import { IUserRequest, IUserResponse } from "../interfaces/users.interfaces";
+import { IUserRequest, IUserResponse } from "../../interfaces/users.interfaces";
 import { QueryResult } from "pg";
-import { client } from "../database";
+import { client } from "../../database";
+import { responseUserSchema } from "../../schemas/users.schemas";
+import { hashSync } from "bcryptjs";
 
 const createUserService = async (
   requestBody: IUserRequest
 ): Promise<IUserResponse> => {
   const requestKeys: string[] = Object.keys(requestBody);
+
+  requestBody.password = hashSync(requestBody.password, 10);
+
   const requestValues: Array<string | boolean | undefined> =
     Object.values(requestBody);
 
@@ -16,7 +21,7 @@ const createUserService = async (
             (%I)
         VALUES
             (%L)
-        RETURNING "id", "name", "email", "admin", "active";
+        RETURNING *;
     `;
 
   const queryFormat: string = format(createQuery, requestKeys, requestValues);
@@ -25,7 +30,9 @@ const createUserService = async (
     queryFormat
   );
 
-  return queryResult.rows[0];
+  const newUser = responseUserSchema.parse(queryResult.rows[0]);
+
+  return newUser;
 };
 
 export default createUserService;

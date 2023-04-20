@@ -1,16 +1,20 @@
-import { requestUserSchema } from "../schemas/users.schemas";
+import {
+  loginUserSchema,
+  requestUserSchema,
+  responseUserSchema,
+  userSchema,
+} from "../schemas/users.schemas";
 
-interface IUser {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-  admin: boolean;
-  active: boolean;
-}
+type IUser = Zod.infer<typeof userSchema>;
 
 type IUserRequest = Zod.infer<typeof requestUserSchema>;
 
-type IUserResponse = Omit<IUser, "password">;
+type IUserResponse = Zod.infer<typeof responseUserSchema>;
 
-export { IUser, IUserRequest, IUserResponse };
+type IUserLogin = Zod.infer<typeof loginUserSchema>;
+
+interface IToken {
+  token: string;
+}
+
+export { IUser, IUserRequest, IUserResponse, IUserLogin, IToken };
