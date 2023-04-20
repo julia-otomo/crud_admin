@@ -21,9 +21,10 @@ const validateToken = (
       throw new AppError(error.message, 401);
     }
 
-    response.locals.email = decoded.email;
-    response.locals.id = decoded.id;
-    response.locals.admin = decoded.admin;
+    response.locals.user = {
+      id: decoded.sub,
+      admin: decoded.admin,
+    };
   });
 
   return next();

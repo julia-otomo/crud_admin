@@ -1,12 +1,18 @@
 import { QueryConfig, QueryResult } from "pg";
-import { IToken, IUser, IUserLogin } from "../../interfaces/users.interfaces";
+import {
+  IToken,
+  IUser,
+  IUserLogin,
+  IUserResponse,
+} from "../../interfaces/users.interfaces";
 import { client } from "../../database";
 import AppError from "../../error";
 import { compareSync } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import "dotenv/config";
+import { log } from "console";
 
-const loginUser = async (requestBody: IUserLogin): Promise<any> => {
+const loginUser = async (requestBody: IUserLogin): Promise<IToken> => {
   const userEmail: string = requestBody.email;
   const userPassword: string = requestBody.password;
 
@@ -39,16 +45,18 @@ const loginUser = async (requestBody: IUserLogin): Promise<any> => {
     throw new AppError("Wrong email/password", 401);
   }
 
-  const token = sign(
-    { email: queryResult.rows[0].email },
+  const user: IUserResponse = queryResult.rows[0];
+
+  const token: string = sign(
+    { admin: user.admin },
     String(process.env.SECRET_KEY),
     {
       expiresIn: process.env.EXPIRES_IN,
-      subject: String(queryResult.rows[0].id),
+      subject: String(user.id),
     }
   );
 
-  return token;
+  return { token };
 };
 
 export default loginUser;
