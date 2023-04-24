@@ -16,6 +16,7 @@ import {
   verifyAdminStatusToUpdateAndDeleteUser,
 } from "../middlewares/verifyAdminStatus.middleware";
 import verifyId from "../middlewares/verifyId.middleware";
+import { validateActivatedUserRecover } from "../middlewares/validateActivatedUser.middleware";
 
 const userRoutes: Router = Router();
 
@@ -36,6 +37,7 @@ userRoutes.put(
   "/:id/recover",
   verifyId,
   verifyAdminStatus,
+  validateActivatedUserRecover,
   activateUserController
 );
 

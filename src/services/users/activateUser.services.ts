@@ -5,28 +5,6 @@ import { responseUserSchema } from "../../schemas/users.schemas";
 import AppError from "../../error";
 
 const activateUser = async (userId: number): Promise<IUserResponse | void> => {
-  const userProfile: string = `
-    SELECT
-        *
-    FROM
-        users
-    WHERE
-        id = $1;
-    `;
-
-  const queryConfigUser: QueryConfig = {
-    text: userProfile,
-    values: [userId],
-  };
-
-  const queryResultUser: QueryResult<IUserResponse> = await client.query(
-    queryConfigUser
-  );
-
-  if (queryResultUser.rows[0].active === true) {
-    throw new AppError("User already active", 400);
-  }
-
   const softDeleteQuery: string = `
     UPDATE 
         users
